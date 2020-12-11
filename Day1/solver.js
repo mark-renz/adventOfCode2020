@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-fs.readFile('day1.txt', 'utf8', (err, data)=>{
+fs.readFile('input.txt', 'utf8', (err, data)=>{
     if(err) throw err;
 
     let dataToArray = data.split('\r\n');
@@ -11,8 +11,10 @@ fs.readFile('day1.txt', 'utf8', (err, data)=>{
 
     for (let i = 0; i<arrayOfNumbers.length;i++){
         let comp = 2020 - arrayOfNumbers[i];
-        if(arrayOfNumbers.indexOf(721)!= -1){
-            console.log("hi!");
+        if(arrayOfNumbers.includes(comp)){
+            let answer = comp * arrayOfNumbers[i];
+            console.log(`answer: ${answer}`);
+            break;
         }
     }
 })
