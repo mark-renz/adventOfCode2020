@@ -17,7 +17,8 @@ function splitData(data){
 
         let obj ={'lowerLimit':lowerLimit[0],'upperLimit':upperLimit[0],'letter':letter[0],'password':password[0]};
       items.push(obj);
-        /*console.log(items);
+        /* messy split but works
+        console.log(items);
         console.log(`lowerlimit: ${lowerLimit} upperlimit: ${upperLimit} letter: ${letter} password: ${password}`)
        checkPassword(lowerLimit[0],upperLimit[0],letter[0],password[0]);
 
@@ -41,10 +42,12 @@ function splitData(data){
                 else false;
             }
         if(mode === 'b'){
-            let a = password.includes(letter,lowerLimit-1) 
-             let b = password.includes(letter,upperLimit-1)
-            if(a === !b){
-                console.log(`${password},${lowerLimit},${upperLimit},${letter},${a},${b}`);
+            //.includes does not work
+            //dont know why
+            let lowerBool = password.charAt(lowerLimit-1)== letter;
+            let upperBool = password.charAt(upperLimit-1)== letter;
+            if(lowerBool === !upperBool){
+                console.log(`${password},${lowerLimit},${upperLimit},${letter},${lowerBool},${upperBool}`);
                 return true;
             }
             else false;
@@ -59,7 +62,7 @@ function splitData(data){
         splitData(data);
         items.map((item)=>{
             let {lowerLimit,upperLimit,letter,password} = item;
-            if(checkPassword(lowerLimit, upperLimit, letter,password, 'a')){
+            if(checkPassword(lowerLimit, upperLimit, letter,password, 'b')){
                 validCount++;
             }
             
