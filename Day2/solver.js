@@ -19,10 +19,11 @@ function splitData(data){
         let letter = item.match(/.?(?=:)/);
         let password = item.match(/[^\s]+$/);
 
-
-        
+        let obj ={'lowerLimit':lowerLimit[0],'upperLimit':upperLimit[0],'letter':letter[0],'password':password[0]};
+        items.push(obj);
+        //console.log(items);
         //console.log(`lowerlimit: ${lowerLimit} upperlimit: ${upperLimit} letter: ${letter} password: ${password}`)
-       checkPassword(lowerLimit[0],upperLimit[0],letter[0],password[0]);
+       //checkPassword(lowerLimit[0],upperLimit[0],letter[0],password[0]);
 
         //let upperlimit = item.match(//);
         // let lowerLimit = item.split('-');
@@ -37,11 +38,19 @@ function splitData(data){
         let regex = new RegExp(letter,'g');
         let count = (password.match(regex) || []).length;
         if(parseInt(lowerLimit)<=count && parseInt(upperLimit)>=count){
-            validCount= validCount + 1;
-            console.log(count);
-            console.log(`count: ${validCount}`);
+           return true;
         }
+        else false;
 
     }
+
+    items.map((item)=>{
+        let {lowerLimit,upperLimit,letter,password} = item;
+        if(checkPassword(lowerLimit, upperLimit, letter,password)){
+            validCount++;
+        }
+    })
+
+    console.log(validCount);
 
 }
