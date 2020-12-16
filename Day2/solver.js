@@ -17,7 +17,7 @@ function splitData(data){
 
         let obj ={'lowerLimit':lowerLimit[0],'upperLimit':upperLimit[0],'letter':letter[0],'password':password[0]};
       items.push(obj);
-        /* messy split but works
+        /* messy split but works also faster than regex
         console.log(items);
         console.log(`lowerlimit: ${lowerLimit} upperlimit: ${upperLimit} letter: ${letter} password: ${password}`)
        checkPassword(lowerLimit[0],upperLimit[0],letter[0],password[0]);
@@ -32,6 +32,7 @@ function splitData(data){
     });
 }
     function checkPassword(lowerLimit, upperLimit, letter, password, mode){
+        //mode = password checking condition
         let regex = new RegExp(letter,'g');
         let count = 0;
         if(mode === 'a'){
@@ -52,6 +53,7 @@ function splitData(data){
             }
             else false;
         }
+        else return false;
     }
     
     
