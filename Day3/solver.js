@@ -6,19 +6,35 @@ fs.readFile('input.txt', 'utf8', (err, data)=>{
 
    //right = 3, down = 1
     let trees = check(dataToArray,3,1);
-   console.log(`trees: ${trees}`)
+    console.log(`trees: ${trees}`);
+
+    let moves = [[1,1],[3,1],[5,1],[7,1],[1,2]];
+
+    let arrOfTrees = moves.map((move)=>{
+        let right = move[0];
+        let down = move[1];
+        console.log(`${right},${down}`)
+        console.log(check(dataToArray,right,down));
+        return check(dataToArray,right,down);
+    }).reduce((product, value)=> product* value);
+
+    console.log(`product of Trees: ${arrOfTrees}`);
+    
+
 });
 
 function check(data,right,down){;
     let ptr = 0;
     let collision = 0;
+    arrSize = data.length-1;
     
-    for(let i=1; i<data.length;i+=down){
-        let arrSize = data[i].length-1;
+    for(let i=down; i<arrSize;i+=down){
+        let strSize = data[i].length-1;
         ptr = ptr + right;
         
-        if(ptr>arrSize){
-            ptr = (ptr%arrSize) - 1;
+        if(ptr>strSize){
+            //-1 because it should start with 0 again
+            ptr = (ptr%strSize) - 1;
         }
         
         if(data[i].charAt(ptr) === "#"){
@@ -28,3 +44,4 @@ function check(data,right,down){;
     }
     return collision;
     }
+
