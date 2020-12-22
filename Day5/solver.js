@@ -1,5 +1,4 @@
 var fs = require('fs');
-const { cpuUsage } = require('process');
 
 const data = fs.readFileSync('input.txt', 'utf8').toString().split(/\r\n/);
 
@@ -15,8 +14,6 @@ for(i=0;i<sortedID.length;i++){
         console.log(`free seatID: ${sortedID[i]+1}`);
     }
 }
-
-console.log(sortedID);
 console.log(`highest seat ID: ${Math.max(...seatID)}`);
 
 
