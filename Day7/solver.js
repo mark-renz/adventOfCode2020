@@ -10,7 +10,7 @@ const directContains = findBags(rules,'shiny gold');
 const numberOfBags = countBags(rules,'shiny gold');
 
 console.log(`Answer part 1: ${directContains.size}`);
-console.log(`Answer part 2: ${numberOfBags}`)
+console.log(`Answer part 1: ${numberOfBags}`);
 function parseRules(data){
     const rules = data.reduce((obj,rule) => {
         bag = rule.split('contain ');
@@ -58,6 +58,7 @@ function countBags(rules, searchKey){
         const {design, amount} = content;
         return total + amount + amount * countBags(rules,design);
     },0);
+    console.log(sum);
     }
     return sum;
 }
