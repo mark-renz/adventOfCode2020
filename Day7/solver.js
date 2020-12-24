@@ -6,10 +6,11 @@ const data = fs.readFileSync('input.txt', 'utf8').toString().split(/\r\n/);
 
 const rules = parseRules(data);
 
- const directContains = findBags(rules,'shiny gold');
+const directContains = findBags(rules,'shiny gold');
+const numberOfBags = countBags(rules,'shiny gold');
 
- console.log(`Answer part 1: ${directContains.size}`);
-
+console.log(`Answer part 1: ${directContains.size}`);
+console.log(`Answer part 2: ${numberOfBags}`)
 function parseRules(data){
     const rules = data.reduce((obj,rule) => {
         bag = rule.split('contain ');
@@ -47,5 +48,17 @@ function findBags(rules,searchKey){
     })
 
    return new Set(bagsWithKey);
+}
+
+function countBags(rules, searchKey){
+    let sum = 0;
+    const bag = rules.find(rule => rule.bag === searchKey);
+    if(!(bag.contain.toString() === 'no other bag')){
+    sum = bag.contain.reduce((total,content)=>{
+        const {design, amount} = content;
+        return total + amount + amount * countBags(rules,design);
+    },0);
+    }
+    return sum;
 }
 
