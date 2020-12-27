@@ -5,17 +5,12 @@ var fs = require('fs');
 
 const data = fs.readFileSync('input.txt', 'utf8').toString().split(/\r\n/);
 
-let accumulator = 0;
+let accPart1 = moveArray(parseInstructions(data)).acc;
+console.log(`answer part 1: ${accPart1}`);
 
-const instructions = parseInstructions(data);
+let accPart2 = changeInstructions(data);
+console.log(`answer part 1: ${accPart2}`);
 
-//accumulator += countAcc(instructions);
-
-//console.log(`answer part 1: ${accumulator}`);
-changeInstructions(instructions);
-
-// countAcc(instructions);
-// console.log(countAcc(instructions));
 function parseInstructions(data){
     const newData = data.map(instruction=>{
         splitInstruct = instruction.split(' ');
@@ -27,83 +22,66 @@ function parseInstructions(data){
     return newData;
 }
 
-function countAcc(instructions){
+function moveArray(input){
 let itr = 0;
 let acc = 0;
+let isFinished = false;
 
-while(!instructions[itr].passed){
-    instructions[itr].passed = true;
-    switch (instructions[itr].move) {
+while(!isFinished && !input[itr].passed){
+    input[itr].passed = true;
+
+    switch (input[itr].move) {
             case 'acc':
-                acc += parseInt(instructions[itr].count);
+                acc += parseInt(input[itr].count);
                 itr+=1;
                 break;
             
             case 'jmp':
-                itr += parseInt(instructions[itr].count);
+                itr += parseInt(input[itr].count);
                 break;
             
             case 'nop':
-                itr+=1;
+                itr += 1;
                 break;
             
             default:
                 break;
         }
-    }
-return acc;
-}
 
-function changeInstructions(instructions){
-    let newInstructions = instructions;
-    let itr = 0;
-    let acc = 0;
-    let finished = false;
-    
-    newInstructions.forEach(instruction => {
-        if(!finished){
-        if(instruction.move === 'jmp' 
-        || instruction.move === 'nop'){
-            if(parseInt(instruction.count) !== 0){
-                //console.log('before',instruction.move);
-                instruction.move === 'jmp'? 
-                instruction.move = 'nop': instruction.move = 'jmp';
-                //console.log('after',newInstructions,countAcc(newInstructions));
-
-                    while(!newInstructions[itr].passed){
-                        newInstructions[itr].passed = true;
-                        switch (instructions[itr].move) {
-                                case 'acc':
-                                    acc += parseInt(instructions[itr].count);
-                                    itr+=1;
-                                    break;
-                                
-                                case 'jmp':
-                                    itr += parseInt(instructions[itr].count);
-                                    break;
-                                
-                                case 'nop':
-                                    itr+=1;
-                                    break;
-                                
-                                default:
-                                    break;
-                            }
-                            console.log(itr);
-                            if(itr>=newInstructions.length-1){
-                                finished=true;
-                                console.log(finished);
-                                break;
-                            }
-                        }
-
-                if(!finished){
-                    instruction.move === 'jmp'? 
-                    instruction.move = 'nop': instruction.move = 'jmp';
-                    console.log('revert',instruction.move)
-                }
-            }
+        if(itr>input.length-1){
+        isFinished = true;
         }
     }
-    });
+return {acc,isFinished};
+}
+
+function changeInstructions(data){
+    const newInstructions = parseInstructions(data);
+
+    let canChangeIndex = [];
+    const canChange = newInstructions.filter((instruction,index) => { 
+            if(instruction.move === 'nop' && parseInt(instruction.count) != 0){
+                canChangeIndex = [...canChangeIndex, index];
+                return instruction;
+            }
+            if(instruction.move === 'jmp'){
+                canChangeIndex = [...canChangeIndex, index];
+                return instruction;
+            }
+    },[]);
+    
+    for (i = 0; i <= canChange.length-1;i++) {
+        const instructions = parseInstructions(data);
+        const changeMove = instructions[canChangeIndex[i]];
+
+        changeMove.move === 'jmp' 
+        ? changeMove.move = 'nop' : changeMove.move = 'jmp';
+        const answers = moveArray(instructions);
+
+        if(answers.isFinished){
+            return answers.acc;
+        }
+
+    }
+
 }
